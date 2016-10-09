@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">AddEmphasisToText</string>
+    <string name="main_textview_text">Type a word</string>
+    <string name="add_emphasis_button_text">Add Emphasis</string>
+    <string name="capitalize_checkbox_text">CAPITALIZE</string>
+    <string name="add_exclaimation_checkbox_text">Add Exclaimation Points</string>
+    <string name="add_smiley_face_checkbox_text">Add Smiley Face</string>
+</resources>
