@@ -1,6 +1,7 @@
 package com.bignerdranch.android.addemphasistotext;
 
 import android.content.DialogInterface;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,10 +12,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
-
+public class MainActivity extends AppCompatActivity
+    implements AddEmphasisFragment.AddEmphasisFragmentListener,
+    ResultsFragment.ResultsFragmentListener{
+    String result;
     private EditText mEditText;
-    private Button mAddEmphasisButton;
     static String[] emphasisOptions = {"Capitalize", "Add Exclaimation Points","Add smiley face"};
     AlertDialog mAlertDialog;
     boolean[] checkedItems = new boolean[emphasisOptions.length];
@@ -27,35 +29,52 @@ public class MainActivity extends AppCompatActivity {
 
         mEditText = (EditText) findViewById(R.id.user_input_edit_text);
 
-        mAddEmphasisButton = (Button)findViewById(R.id.add_emphasis_button);
-        mAddEmphasisButton.setOnClickListener(new View.OnClickListener(){
+        Button showEmphasis = (Button)findViewById(R.id.add_emphasis_button);
+        showEmphasis.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-//                AddEmphasisFragment dialog = AddEmphasisFragment.newInstance("Choose some of these");
-//                dialog.show(getFragmentManager(), "What emphasis would you like?");
-                mAlertDialog.show();
-            }
-        });
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Which emphasis would you like?");
-        builder.setPositiveButton(android.R.string.ok, new AlertDialog.OnClickListener(){
-            public void onClick(DialogInterface dialogInterface, int which){
-                if (checkedItems[0]){
+                AddEmphasisFragment dialog = AddEmphasisFragment.newInstance("Emphasis Options");
+                dialog.show(getFragmentManager(), "What emphasis would you like?");
 
-                    Toast.makeText(getApplicationContext(), emphasisOptions[which], Toast.LENGTH_SHORT).show();
-                }
-                mAlertDialog = builder.create();
-                mAlertDialog.show();
-            }
-        } );
-        builder.setNegativeButton("Cancel",null);
-        builder.setMultiChoiceItems(emphasisOptions, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                Toast.makeText(getApplicationContext(), emphasisOptions[which], Toast.LENGTH_SHORT).show();
+
             }
         });
-        mAlertDialog=builder.create();
 
     }
-}
+    public void userDidNothing(){
+
+    }
+    public void userClickedOk() {
+        ResultsFragment dialog = ResultsFragment.newInstance();
+
+        dialog.setResults(result);
+        dialog.show(getFragmentManager(), "Results");
+    }
+    public  void userClickedCancel(){
+    }
+    public void userCheckedCapitalize(){
+        ResultsFragment dialog = ResultsFragment.newInstance();
+        result = mEditText.getText().toString().toUpperCase();
+        dialog.setResults(result);
+        //dialog.show(getFragmentManager(), "Results");
+        //mEditText.setText(result);
+
+    }
+
+    @Override
+    public void userCheckedExclaimationPOints() {
+        ResultsFragment dialog = ResultsFragment.newInstance();
+        result = mEditText.getText().toString()+"!!!";
+        dialog.setResults(result);
+
+    }
+
+    @Override
+    public void userCheckedAddSmileyFace() {
+        ResultsFragment dialog = ResultsFragment.newInstance();
+        result = mEditText.getText().toString()+":)";
+        dialog.setResults(result);
+    }
+
+    }
+
