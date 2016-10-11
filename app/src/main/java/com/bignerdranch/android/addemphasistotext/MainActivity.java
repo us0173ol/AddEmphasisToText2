@@ -12,15 +12,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity
-    implements AddEmphasisFragment.AddEmphasisFragmentListener,
-    ResultsFragment.ResultsFragmentListener{
+public class MainActivity extends AppCompatActivity implements
+        AddEmphasisFragment.AddEmphasisFragmentListener,
+        ResultsFragment.ResultsFragmentListener {
+    //global variables
     String result;
     private EditText mEditText;
-    static String[] emphasisOptions = {"Capitalize", "Add Exclaimation Points","Add smiley face"};
-    AlertDialog mAlertDialog;
-    boolean[] checkedItems = new boolean[emphasisOptions.length];
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,52 +26,34 @@ public class MainActivity extends AppCompatActivity
 
         mEditText = (EditText) findViewById(R.id.user_input_edit_text);
 
-        Button showEmphasis = (Button)findViewById(R.id.add_emphasis_button);
-        showEmphasis.setOnClickListener(new View.OnClickListener(){
+        Button showEmphasis = (Button) findViewById(R.id.add_emphasis_button);
+        //when button is clicked, show dialog with emphasis options
+        showEmphasis.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 AddEmphasisFragment dialog = AddEmphasisFragment.newInstance("Emphasis Options");
                 dialog.show(getFragmentManager(), "What emphasis would you like?");
-
-
             }
         });
-
     }
-    public void userDidNothing(){
-
-    }
-    public void userClickedOk() {
+    /*when the user clicks ok, the method connected to each checkbox is called based on
+    * whether that checkbox is checked or not.  Sends that string to the results fragment
+    * and displays them*/
+    public void userClickedOk(boolean[] checkedItems) {
         ResultsFragment dialog = ResultsFragment.newInstance();
-
+        result = mEditText.getText().toString();
+        if (checkedItems[0]) {
+            result = result.toUpperCase();
+        }
+        if (checkedItems[1]) {
+            result += "!!!";
+        }
+        if (checkedItems[2]) {
+            result += ":)";
+        }
         dialog.setResults(result);
         dialog.show(getFragmentManager(), "Results");
     }
-    public  void userClickedCancel(){
-    }
-    public void userCheckedCapitalize(){
-        ResultsFragment dialog = ResultsFragment.newInstance();
-        result = mEditText.getText().toString().toUpperCase();
-        dialog.setResults(result);
-        //dialog.show(getFragmentManager(), "Results");
-        //mEditText.setText(result);
 
-    }
-
-    @Override
-    public void userCheckedExclaimationPOints() {
-        ResultsFragment dialog = ResultsFragment.newInstance();
-        result = mEditText.getText().toString()+"!!!";
-        dialog.setResults(result);
-
-    }
-
-    @Override
-    public void userCheckedAddSmileyFace() {
-        ResultsFragment dialog = ResultsFragment.newInstance();
-        result = mEditText.getText().toString()+":)";
-        dialog.setResults(result);
-    }
-
-    }
+}
 
